@@ -25,13 +25,13 @@ To run this calendar locally, you only need to serve the files through a local s
 
 ### **Running the Solution**
 
-To run the solution, clone the repo and run in the terminal: **npx run serve**
-The repo comes with 3 example XML files, to test the solution.
-**test.xml** - a simple file with 2 events that don't overlap
-**overlap.xml** - a file with mutltiple events that overlap
-**overnight.xml** - a file with an overnight event
-Enter the relative URI into the the input field and generate the calendar.
-For optimal performance refresh the page before loading another calendar.
+- To run the solution, clone the repo and run in the terminal: **npx run serve**
+- The repo comes with 3 example XML files, to test the solution.
+- **test.xml** - a simple file with 2 events that don't overlap
+- **overlap.xml** - a file with mutltiple events that overlap
+- **overnight.xml** - a file with an overnight event
+- Enter the relative URI into the the input field and generate the calendar.
+- For optimal performance refresh the page before loading another calendar.
 
 <img width="1082" height="846" alt="image" src="https://github.com/user-attachments/assets/8b269879-0179-4dd4-a42d-7c3522388951" />
 
