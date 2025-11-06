@@ -1,0 +1,20 @@
+<xml>
+  <dayinweek hr="20.01.2025 13:00:00">1737378000</dayinweek>
+  <items>
+    <item>
+      <title>Initial Kickoff</title>
+      <start hr="22.01.2025 10:30:00">1737541800</start>
+      <end hr="22.01.2025 12:30:00">1737549000</end>
+    </item>
+    <item>
+      <title>Deep Dive Session</title>
+      <start hr="22.01.2025 12:00:00">1737547200</start>
+      <end hr="22.01.2025 14:00:00">1737554400</end>
+    </item>
+    <item>
+      <title>Wrap-up Call</title>
+      <start hr="23.01.2025 09:30:00">1737621000</start>
+      <end hr="23.01.2025 10:30:00">1737624600</end>
+    </item>
+  </items>
+</xml>

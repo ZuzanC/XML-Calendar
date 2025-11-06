@@ -1,0 +1,15 @@
+<xml>
+  <dayinweek hr="20.01.2025 13:00:00">1737378000</dayinweek>
+  <items>
+    <item>
+      <title>Initial Kickoff</title>
+      <start hr="22.01.2025 11:30:00">1737541800</start>
+      <end hr="22.01.2025 13:30:00">1737549000</end>
+    </item>
+    <item>
+      <title>Overnight Deployment</title>
+      <start hr="22.01.2025 23:30:00">1737585000</start>
+      <end hr="23.01.2025 03:00:00">1737597600</end>
+    </item>
+  </items>
+</xml>

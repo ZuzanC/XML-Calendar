@@ -1,0 +1,105 @@
+body {
+    overflow-x: auto;  
+    overflow-y: auto;
+    min-width: min-content;
+    margin: auto;
+    padding: 20px;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+  p { 
+     padding: 10px 8px 10px 0;
+     color: #5b5b5b;
+    }
+
+  input{
+    width:480px;
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid #d0d4da;
+    background:white;
+    margin-right: 10px;
+  }
+
+  button {
+    padding:8px 12px;
+    border-radius:8px;
+    border: none;
+    background:#41a741;
+    color:white;
+    cursor:pointer;
+  }
+}
+
+#time-elapsed{
+  color: rgb(57, 57, 224);
+  font-size: 12px;
+  padding-bottom: 10px;
+  font-style: italic;
+}
+
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  font-family: sans-serif;
+  border: 1px solid #ccc;
+  width: fit-content
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr);
+  border-bottom: 1px solid #eee;
+}
+
+.header {
+  background: #e0e0e0;
+}
+
+.header-cell {
+  text-align: center;
+  align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.time-cell {
+  border-right: 1px solid #ccc;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #434242;
+}
+
+.day-cell {
+    width: 150px;
+    border-right: 1px solid #eee;
+    height: 30px;
+    position: relative;
+}
+
+.active-day {
+    background-color: #7ac7a3;
+}
+
+.event {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #e5d0fd;
+    position: absolute;
+    top: 0;
+    border-radius: 5px;
+    width: 150px;
+    font-size: 10px;
+}
+
