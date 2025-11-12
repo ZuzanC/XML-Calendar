@@ -2,6 +2,7 @@ body {
     overflow-x: auto;  
     overflow-y: auto;
     min-width: min-content;
+    min-height: min-content;
     margin: auto;
     padding: 20px;
     font-family:Arial, Helvetica, sans-serif;
@@ -56,33 +57,49 @@ body {
   display: grid;
   grid-template-columns: 80px repeat(7, 1fr);
   border-bottom: 1px solid #eee;
+  box-sizing: border-box;
 }
 
 .header {
   background: #e0e0e0;
 }
 
-.header-cell {
-  text-align: center;
-  align-items: center;
-    display: flex;
-    justify-content: center;
+.time-column {
+  border: 1px solid #ccc
 }
 
 .time-cell {
-  border-right: 1px solid #ccc;
   background: #fafafa;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   color: #434242;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  border-bottom: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.time-cell:last-child {
+  border-bottom: none;
+}
+
+
+.header-cell {
+    width: 150px;
+    border: 1px solid #ccc;
+    height: 30px;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
 .day-cell {
-    width: 150px;
-    border-right: 1px solid #eee;
-    height: 30px;
-    position: relative;
+  background-color: #fafafa;
+  height: calc(48*30px);
+  border-right: 1px solid #ccc;
+  position: relative;
 }
 
 .active-day {

@@ -1,6 +1,7 @@
 const loadXml = document.getElementById("loadXml");
 const URI = document.getElementById("Uri");
 var activeDay = "";
+var weekDays = [];
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const months = [
   "January",
@@ -29,6 +30,7 @@ function loadDoc() {
         const timerStart = performance.now();
         findWeek(this);
         findEvents(this);
+        
         const timerEnd = performance.now();
         document.getElementById(
           "time-elapsed"
@@ -89,48 +91,87 @@ function findEvents(xmlFile) {
     });
   }
 
-  events.forEach((event) => {
-    if (event.eventDay == event.eventDayEnd) {
-      const eventSlot = document.querySelectorAll(
-        `[data-day="${event.eventDay}"][data-time="${event.eventStart}"]`)[0];
-      const eventCell = document.createElement("div");
-      eventCell.classList.add("event");
-      eventCell.id = event.eventID;
-      eventCell.style.height = `${event.eventLength}px`;
-      eventCell.innerHTML = `<div>${event.title}</div>`;
-      eventCell.innerHTML += event.subtitle;
-      eventCell.style.width = `${event.eventWidth}px`;
-      eventSlot.appendChild(eventCell);
-    } else {
-      const leftoverMinutes = event.eventStart + event.eventLength - 48 * 30;
-      const eventSlotStart = document.querySelectorAll(
-        `[data-day="${event.eventDay}"][data-time="${event.eventStart}"]`)[0];
-      const eventSlotEnd = document.querySelectorAll(
-        `[data-day="${event.eventDayEnd}"][data-time="0"]`)[0];
+    events.forEach((event) => {
+      if(weekDays.includes(event.eventDay) || weekDays.includes(event.eventDayEnd)){
+        console.log('includes')
+        if (event.eventDay == event.eventDayEnd) {
+          const eventColumn = document.getElementById(event.eventDay);
+          const eventCell = document.createElement("div");
+          eventCell.classList.add("event");
+          eventCell.id = event.eventID;
+          eventCell.style.top = `${event.eventStart}px`
+          eventCell.style.height = `${event.eventLength}px`;
+          eventCell.innerHTML = `<div>${event.title}</div>`;
+          eventCell.innerHTML += event.subtitle;
+          eventCell.style.width = `${event.eventWidth}px`;
+          eventColumn.appendChild(eventCell);
+        }
+        else if(event.eventDay != event.eventDayEnd) {
+          console.log('not on the same day');
+          if((weekDays.includes(event.eventDay))&&(weekDays.includes(event.eventDayEnd))){
 
-      const eventCell1 = document.createElement("div");
-      eventCell1.classList.add("event");
-      eventCell1.id = event.eventID;
-      eventCell1.style.height = `${event.eventLength - leftoverMinutes}px`;
-      eventCell1.innerHTML = `<div>${event.title}</div>`;
-      eventCell1.innerHTML += event.subtitle;
-      eventCell1.style.width = `${event.eventWidth}px`;
-      eventSlotStart.appendChild(eventCell1);
+            const leftoverMinutes = event.eventStart + event.eventLength - 48 * 30;
+            const eventSlotStart = document.getElementById(event.eventDay);
+            const eventSlotEnd = document.getElementById(event.eventDayEnd);
 
-      const eventCell2 = document.createElement("div");
-      eventCell2.classList.add("event");
-      eventCell2.id = event.eventID;
-      eventCell2.style.height = `${leftoverMinutes}px`;
-      eventCell2.innerHTML = `<div>${event.title}</div>`;
-      eventCell2.innerHTML += event.subtitle;
-      eventCell2.style.width = `${event.eventWidth}px`;
-      eventSlotEnd.appendChild(eventCell2);
+            const eventCell1 = document.createElement("div");
+            eventCell1.classList.add("event");
+            eventCell1.id = event.eventID;
+            eventCell1.style.height = `${event.eventLength - leftoverMinutes}px`;
+            eventCell1.style.top = `${event.eventStart}px`
+            eventCell1.innerHTML = `<div>${event.title}</div>`;
+            eventCell1.innerHTML += `<div>${event.subtitle}</div>`;
+            eventCell1.style.width = `${event.eventWidth}px`;
+            eventSlotStart.appendChild(eventCell1);
+
+            const eventCell2 = document.createElement("div");
+            eventCell2.classList.add("event");
+            eventCell2.id = event.eventID;
+            eventCell2.style.height = `${leftoverMinutes}px`;
+            eventCell2.innerHTML = `<div>${event.title}</div>`;
+            eventCell2.innerHTML += `<div>${event.subtitle}</div>`;
+            eventCell2.style.width = `${event.eventWidth}px`;
+            eventSlotEnd.appendChild(eventCell2); 
+          }
+
+          else if((weekDays.includes(event.eventDay))&&!(weekDays.includes(event.eventDayEnd))){
+
+            console.log(event.eventDay,'is in the calendar but',event.eventDayEnd,'is not')
+            const eventColumn = document.getElementById(event.eventDay);
+            const eventCell = document.createElement("div");
+            const leftoverMinutes = event.eventStart + event.eventLength - 48 * 30;
+            eventCell.classList.add("event");
+            eventCell.id = event.eventID;
+            eventCell.style.top = `${event.eventStart}px`
+            eventCell.style.height = `${event.eventLength - leftoverMinutes}px`;
+            eventCell.innerHTML = `<div>${event.title}</div>`;
+            eventCell.innerHTML += event.subtitle;
+            eventCell.style.width = `${event.eventWidth}px`;
+            eventColumn.appendChild(eventCell);
+          }
+          else if((weekDays.includes(event.eventDayEnd))&&!(weekDays.includes(event.eventDay))){
+            console.log(event.eventDayEnd,'is in the calendar but',event.eventDay,'is not')
+            const eventColumn = document.getElementById(event.eventDayEnd);
+            const leftoverMinutes = event.eventStart + event.eventLength - 48 * 30;
+            const eventCell = document.createElement("div");
+            eventCell.classList.add("event");
+            eventCell.id = event.eventID;
+            eventCell.style.height = `${leftoverMinutes}px`;
+            eventCell.innerHTML = `<div>${event.title}</div>`;
+            eventCell.innerHTML += `<div>${event.subtitle}</div>`;
+            eventCell.style.width = `${event.eventWidth}px`;
+            eventColumn.appendChild(eventCell); 
+          }
+
+        } 
     }
-  });
+    else console.error("Event outside of the week-range")
+})
 
-  var overlapEvents = [];
 
-  for (let i = 0; i < events.length; i++) {
+var overlapEvents = [];
+
+/*   for (let i = 0; i < events.length; i++) {
     for (let x = i + 1; x < events.length; x++) {
       if (
         events[i].eventDay == events[x].eventDay &&
@@ -151,7 +192,7 @@ function findEvents(xmlFile) {
         el.style.marginLeft = sharedWidth * index + 4 + "px";
       }
     });
-  }
+  } */
 }
 
 function formatTime(date) {
@@ -163,7 +204,6 @@ function formatTime(date) {
 function findWeek(xmlFile) {
   var file = xmlFile.responseXML;
   var UnixTime = file.getElementsByTagName("dayinweek")[0].textContent;
-  const weekDays = [];
 
   const currentDate = new Date(UnixTime * 1000);
   const dayOfWeek = currentDate.getDay();
@@ -179,6 +219,7 @@ function findWeek(xmlFile) {
   }
 
   generateCalendar(weekDays);
+  console.log(weekDays,'weekdays');
 }
 
 function structureWeekdays(day) {
@@ -189,28 +230,15 @@ function generateCalendar(days) {
   const calendarContainer = document.getElementById("calendar");
   calendarContainer.innerHTML = "";
 
-  const weekdaysHeader = document.createElement("div");
-  weekdaysHeader.classList.add("row", "header");
+  const timeColumn = document.createElement("div");
+  timeColumn.classList.add("time-column");
 
   const emptyCell = document.createElement("div");
-  emptyCell.classList.add("time-cell", "header-cell");
-  weekdaysHeader.appendChild(emptyCell);
+  emptyCell.className = "time-cell";
 
-  days.forEach((day) => {
-    const dayCell = document.createElement("div");
-    dayCell.classList.add("day-cell", "header-cell");
-    if (day == activeDay) {
-      dayCell.classList.add("active-day");
-    }
-    dayCell.textContent = day;
-    weekdaysHeader.appendChild(dayCell);
-  });
-
-  calendarContainer.appendChild(weekdaysHeader);
-
+  timeColumn.appendChild(emptyCell);
+  
   for (let i = 0; i < 48; i++) {
-    const row = document.createElement("div");
-    row.className = "row";
     var timeLabel = i * 30;
 
     const timeCell = document.createElement("div");
@@ -226,16 +254,28 @@ function generateCalendar(days) {
       timeCell.textContent = "";
     }
 
-    row.appendChild(timeCell);
-
-    days.forEach((day) => {
-      const slot = document.createElement("div");
-      slot.className = "day-cell";
-      slot.dataset.day = day;
-      slot.dataset.time = timeLabel;
-      row.appendChild(slot);
-    });
-
-    calendar.appendChild(row);
+    timeColumn.appendChild(timeCell);
   }
+
+  calendarContainer.appendChild(timeColumn);
+
+  days.forEach((day) => {
+
+    const dayColumn = document.createElement("div");
+    dayColumn.className="day-column";
+
+    const dayHeader = document.createElement("div");
+    const dayCell = document.createElement("div");
+    dayCell.className ="day-cell";
+    dayCell.id = day;
+    dayHeader.classList.add("header-cell");
+    if (day == activeDay) {
+      dayHeader.classList.add("active-day");
+    }
+    dayHeader.textContent = day;
+
+    dayColumn.appendChild(dayHeader);
+    dayColumn.appendChild(dayCell);
+    calendarContainer.appendChild(dayColumn);
+  });
 }
