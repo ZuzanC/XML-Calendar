@@ -16,5 +16,20 @@
       <start hr="23.01.2025 09:30:00">1737621000</start>
       <end hr="23.01.2025 10:30:00">1737624600</end>
     </item>
+    <item>
+      <title>Catching up</title>
+      <start hr="23.01.2025 10:00:00">1737622800</start>
+      <end hr="23.01.2025 10:30:00">1737624600</end>
+    </item>
+    <item>
+      <title>Team Sync</title>
+      <start hr="23.01.2025 10:15:00">1737623700</start>
+      <end hr="23.01.2025 11:00:00">1737626400</end>
+    </item>
+    <item>
+      <title>Overlap</title>
+      <start hr="23.01.2025 10:30:00">1737624600</start>
+      <end hr="23.01.2025 10:30:00">1737626400</end>
+    </item>
   </items>
 </xml>

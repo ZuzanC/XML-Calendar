@@ -30,6 +30,7 @@ function loadDoc() {
         const timerStart = performance.now();
         findWeek(this);
         findEvents(this);
+        fixOverlapping();
         
         const timerEnd = performance.now();
         document.getElementById(
@@ -87,27 +88,25 @@ function findEvents(xmlFile) {
       eventDay: eventDayStart,
       eventDayEnd: eventDayEnd,
       eventID: Math.floor(Math.random() * 100),
-      eventWidth: 150,
+      eventWidth: 300,
     });
   }
 
     events.forEach((event) => {
       if(weekDays.includes(event.eventDay) || weekDays.includes(event.eventDayEnd)){
-        console.log('includes')
         if (event.eventDay == event.eventDayEnd) {
           const eventColumn = document.getElementById(event.eventDay);
           const eventCell = document.createElement("div");
           eventCell.classList.add("event");
           eventCell.id = event.eventID;
-          eventCell.style.top = `${event.eventStart}px`
-          eventCell.style.height = `${event.eventLength}px`;
-          eventCell.innerHTML = `<div>${event.title}</div>`;
+          eventCell.style.top = event.eventStart+'px'
+          eventCell.style.height = event.eventLength +'px';
+          eventCell.innerHTML = event.title;
           eventCell.innerHTML += event.subtitle;
-          eventCell.style.width = `${event.eventWidth}px`;
+          eventCell.style.width = event.eventWidth +'px';
           eventColumn.appendChild(eventCell);
         }
         else if(event.eventDay != event.eventDayEnd) {
-          console.log('not on the same day');
           if((weekDays.includes(event.eventDay))&&(weekDays.includes(event.eventDayEnd))){
 
             const leftoverMinutes = event.eventStart + event.eventLength - 48 * 30;
@@ -117,49 +116,49 @@ function findEvents(xmlFile) {
             const eventCell1 = document.createElement("div");
             eventCell1.classList.add("event");
             eventCell1.id = event.eventID;
-            eventCell1.style.height = `${event.eventLength - leftoverMinutes}px`;
-            eventCell1.style.top = `${event.eventStart}px`
+            eventCell1.style.height = event.eventLength - leftoverMinutes +'px';
+            eventCell1.style.top = event.eventStart +'px';
             eventCell1.innerHTML = `<div>${event.title}</div>`;
             eventCell1.innerHTML += `<div>${event.subtitle}</div>`;
-            eventCell1.style.width = `${event.eventWidth}px`;
+            eventCell1.style.width = event.eventWidth +'px';
             eventSlotStart.appendChild(eventCell1);
 
             const eventCell2 = document.createElement("div");
             eventCell2.classList.add("event");
             eventCell2.id = event.eventID;
-            eventCell2.style.height = `${leftoverMinutes}px`;
+            eventCell2.style.top = '0px';
+            eventCell2.style.height = leftoverMinutes +'px';
             eventCell2.innerHTML = `<div>${event.title}</div>`;
             eventCell2.innerHTML += `<div>${event.subtitle}</div>`;
-            eventCell2.style.width = `${event.eventWidth}px`;
+            eventCell2.style.width = event.eventWidth +'px';
             eventSlotEnd.appendChild(eventCell2); 
           }
 
           else if((weekDays.includes(event.eventDay))&&!(weekDays.includes(event.eventDayEnd))){
 
-            console.log(event.eventDay,'is in the calendar but',event.eventDayEnd,'is not')
             const eventColumn = document.getElementById(event.eventDay);
             const eventCell = document.createElement("div");
             const leftoverMinutes = event.eventStart + event.eventLength - 48 * 30;
             eventCell.classList.add("event");
             eventCell.id = event.eventID;
-            eventCell.style.top = `${event.eventStart}px`
-            eventCell.style.height = `${event.eventLength - leftoverMinutes}px`;
+            eventCell.style.top = event.eventStart +'px'
+            eventCell.style.height = event.eventLength - leftoverMinutes + 'px';
             eventCell.innerHTML = `<div>${event.title}</div>`;
             eventCell.innerHTML += event.subtitle;
-            eventCell.style.width = `${event.eventWidth}px`;
+            eventCell.style.width = event.eventWidth +'px';
             eventColumn.appendChild(eventCell);
           }
           else if((weekDays.includes(event.eventDayEnd))&&!(weekDays.includes(event.eventDay))){
-            console.log(event.eventDayEnd,'is in the calendar but',event.eventDay,'is not')
             const eventColumn = document.getElementById(event.eventDayEnd);
             const leftoverMinutes = event.eventStart + event.eventLength - 48 * 30;
             const eventCell = document.createElement("div");
             eventCell.classList.add("event");
             eventCell.id = event.eventID;
-            eventCell.style.height = `${leftoverMinutes}px`;
+            eventCell.style.top = '0px';
+            eventCell.style.height = leftoverMinutes +'px';
             eventCell.innerHTML = `<div>${event.title}</div>`;
             eventCell.innerHTML += `<div>${event.subtitle}</div>`;
-            eventCell.style.width = `${event.eventWidth}px`;
+            eventCell.style.width = event.eventWidth +'px';
             eventColumn.appendChild(eventCell); 
           }
 
@@ -169,37 +168,93 @@ function findEvents(xmlFile) {
 })
 
 
-var overlapEvents = [];
 
-/*   for (let i = 0; i < events.length; i++) {
-    for (let x = i + 1; x < events.length; x++) {
-      if (
-        events[i].eventDay == events[x].eventDay &&
-        events[i].eventEnd > events[x].eventStart
-      ) {
-        overlapEvents.push(events[i], events[x]);
+
+}
+
+function fixOverlapping() {
+  weekDays.forEach(weekday => {
+    const day = document.getElementById(weekday);
+    const events = Array.from(day.querySelectorAll(".event"));
+
+    if (day.children.length > 1) {
+
+      const eventData = events.map(event => ({
+        id: event.id,
+        start: parseInt(event.style.top),
+        end: parseInt(event.style.top) + parseInt(event.style.height),
+        element: event,
+        columnIndex: null
+      }));
+
+      eventData.sort((a, b) => a.start - b.start);
+
+      let i = 0;
+
+      while (i < eventData.length) {
+
+        const group = [];
+        const columns = [];
+
+        // Start new group
+        const firstEvent = eventData[i];
+        group.push(firstEvent);
+        columns.push(firstEvent);
+        firstEvent.columnIndex = 0;
+
+        let groupEnd = firstEvent.end;
+
+        // Add overlapping events
+        for (let nextEventIndex = i + 1; nextEventIndex < eventData.length; nextEventIndex++) {
+          const nextEvent = eventData[nextEventIndex];
+
+          if (nextEvent.start < groupEnd) {
+
+            // Find column
+            let assignedColumnIndex = undefined;
+            for (let x = 0; x < columns.length; x++) {
+              if (columns[x].end <= nextEvent.start) {
+                assignedColumnIndex = x;
+              }
+            }
+            if (assignedColumnIndex === undefined) {
+              assignedColumnIndex = columns.length;
+            }
+
+            nextEvent.columnIndex = assignedColumnIndex;
+            columns[assignedColumnIndex] = nextEvent;
+            group.push(nextEvent);
+
+            if (nextEvent.end > groupEnd) {groupEnd = nextEvent.end};
+          } 
+        }
+
+        // Now compute real max overlap
+        let maxOverlap = 0;
+
+        const groupStartTime = Math.min(...group.map(event => event.start));
+        const groupEndTime = Math.max(...group.map(event => event.end));
+
+        for (let timePixel = groupStartTime; timePixel <= groupEndTime; timePixel++) {
+          const count = group.filter(event => event.start <= timePixel && event.end > timePixel).length;
+          if (count > maxOverlap) {maxOverlap = count};
+        }
+
+        // Apply layout
+        const width = (300 / maxOverlap) - 5;
+
+        group.forEach(event => {
+          event.element.style.width = width + "px";
+          event.element.style.marginLeft = (event.columnIndex * width) + "px";
+        });
+
+        i += group.length;
       }
     }
-  }
-
-  if (overlapEvents.length > 1) {
-    const sharedWidth = 150 / overlapEvents.length - 4;
-
-    overlapEvents.forEach((e, index) => {
-      const el = document.getElementById(e.eventID);
-      el.style.width = sharedWidth + "px";
-      if (index > 0) {
-        el.style.marginLeft = sharedWidth * index + 4 + "px";
-      }
-    });
-  } */
+  });
 }
 
-function formatTime(date) {
-  const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  return `${hours}:${minutes}`;
-}
+
 
 function findWeek(xmlFile) {
   var file = xmlFile.responseXML;
@@ -219,11 +274,6 @@ function findWeek(xmlFile) {
   }
 
   generateCalendar(weekDays);
-  console.log(weekDays,'weekdays');
-}
-
-function structureWeekdays(day) {
-  return `${days[day.getDay()]} ${day.getDate()} ${months[day.getMonth()]}`;
 }
 
 function generateCalendar(days) {
@@ -278,4 +328,14 @@ function generateCalendar(days) {
     dayColumn.appendChild(dayCell);
     calendarContainer.appendChild(dayColumn);
   });
+}
+
+function structureWeekdays(day) {
+  return `${days[day.getDay()]} ${day.getDate()} ${months[day.getMonth()]}`;
+}
+
+function formatTime(date) {
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  return `${hours}:${minutes}`;
 }
