@@ -75,9 +75,7 @@ function findEvents(xmlFile) {
     }
 
     const eventLength = eventMinuteEnd - eventMinuteStart;
-    const timeString = `<div>${formatTime(eventDateStart)}-${formatTime(
-      eventDateEnd
-    )}<div>`;
+    const timeString = `${formatTime(eventDateStart)}-${formatTime(eventDateEnd)}`;
 
     events.push({
       title: title,
@@ -101,8 +99,8 @@ function findEvents(xmlFile) {
           eventCell.id = event.eventID;
           eventCell.style.top = event.eventStart+'px'
           eventCell.style.height = event.eventLength +'px';
-          eventCell.innerHTML = event.title;
-          eventCell.innerHTML += event.subtitle;
+          eventCell.innerHTML = `<div>${event.title}</div>`;
+          eventCell.innerHTML += `<div>${event.subtitle}</div>`;
           eventCell.style.width = event.eventWidth +'px';
           eventColumn.appendChild(eventCell);
         }
@@ -118,7 +116,7 @@ function findEvents(xmlFile) {
             eventCell1.id = event.eventID;
             eventCell1.style.height = event.eventLength - leftoverMinutes +'px';
             eventCell1.style.top = event.eventStart +'px';
-            eventCell1.innerHTML = `<div>${event.title}</div>`;
+            eventCell1.innerHTML = `<div>${event.title}</div>`;;
             eventCell1.innerHTML += `<div>${event.subtitle}</div>`;
             eventCell1.style.width = event.eventWidth +'px';
             eventSlotStart.appendChild(eventCell1);
@@ -128,7 +126,7 @@ function findEvents(xmlFile) {
             eventCell2.id = event.eventID;
             eventCell2.style.top = '0px';
             eventCell2.style.height = leftoverMinutes +'px';
-            eventCell2.innerHTML = `<div>${event.title}</div>`;
+            eventCell2.innerHTML = `<div>${event.title}</div>`;;
             eventCell2.innerHTML += `<div>${event.subtitle}</div>`;
             eventCell2.style.width = event.eventWidth +'px';
             eventSlotEnd.appendChild(eventCell2); 
@@ -165,12 +163,7 @@ function findEvents(xmlFile) {
         } 
     }
     else console.error("Event outside of the week-range")
-})
-
-
-
-
-}
+})}
 
 function fixOverlapping() {
   weekDays.forEach(weekday => {
@@ -196,7 +189,6 @@ function fixOverlapping() {
         const group = [];
         const columns = [];
 
-        // Start new group
         const firstEvent = eventData[i];
         group.push(firstEvent);
         columns.push(firstEvent);
@@ -204,13 +196,11 @@ function fixOverlapping() {
 
         let groupEnd = firstEvent.end;
 
-        // Add overlapping events
         for (let nextEventIndex = i + 1; nextEventIndex < eventData.length; nextEventIndex++) {
           const nextEvent = eventData[nextEventIndex];
 
           if (nextEvent.start < groupEnd) {
 
-            // Find column
             let assignedColumnIndex = undefined;
             for (let x = 0; x < columns.length; x++) {
               if (columns[x].end <= nextEvent.start) {
@@ -229,7 +219,6 @@ function fixOverlapping() {
           } 
         }
 
-        // Now compute real max overlap
         let maxOverlap = 0;
 
         const groupStartTime = Math.min(...group.map(event => event.start));
@@ -240,8 +229,7 @@ function fixOverlapping() {
           if (count > maxOverlap) {maxOverlap = count};
         }
 
-        // Apply layout
-        const width = (300 / maxOverlap) - 5;
+        const width = (300 / maxOverlap);
 
         group.forEach(event => {
           event.element.style.width = width + "px";
@@ -253,8 +241,6 @@ function fixOverlapping() {
     }
   });
 }
-
-
 
 function findWeek(xmlFile) {
   var file = xmlFile.responseXML;
@@ -296,12 +282,12 @@ function generateCalendar(days) {
 
     if (timeLabel % 60 == 0) {
       if (timeLabel / 60 < 10) {
-        timeCell.textContent = "0" + timeLabel / 60 + ":00";
+        timeCell.innerHTML += "<p>0" + timeLabel / 60 + ":00</p>";
       } else {
-        timeCell.textContent = timeLabel / 60 + ":00";
+        timeCell.innerHTML += "<p>"+timeLabel / 60 + ":00</p>";
       }
     } else {
-      timeCell.textContent = "";
+      timeCell.innerHTML = "";
     }
 
     timeColumn.appendChild(timeCell);

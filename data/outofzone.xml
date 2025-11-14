@@ -6,28 +6,21 @@
       <start hr="22.01.2025 11:30:00">1737541800</start>
       <end hr="22.01.2025 13:30:00">1737549000</end>
     </item>
-
     <item>
       <title>Overnight Deployment</title>
       <start hr="22.01.2025 23:30:00">1737585000</start>
       <end hr="23.01.2025 03:00:00">1737597600</end>
     </item>
-
-    <!-- Event starting before the week but ending on the first day -->
     <item>
       <title>Carry-over Task</title>
       <start hr="19.01.2025 23:00:00">1737326885</start>
       <end hr="20.01.2025 02:00:00">1737338400</end>
     </item>
-
-    <!-- Event starting at the end of the week and ending after -->
     <item>
       <title>Post-week Review</title>
       <start hr="26.01.2025 22:00:00">1737928800</start>
       <end hr="27.01.2025 01:00:00">1737939600</end>
     </item>
-
-    <!-- Event completely outside the week -->
     <item>
       <title>Future Planning</title>
       <start hr="28.01.2025 10:00:00">1738068000</start>

@@ -44,19 +44,16 @@ body {
   font-style: italic;
 }
 
-
 .calendar {
   display: flex;
   flex-direction: column;
   font-family: sans-serif;
-  border: 1px solid #ccc;
   width: fit-content
 }
 
 .row {
   display: grid;
   grid-template-columns: 80px repeat(7, 1fr);
-  border-bottom: 1px solid #eee;
   box-sizing: border-box;
 }
 
@@ -68,6 +65,10 @@ body {
   border: 1px solid #ccc
 }
 
+.day-column {
+  border-bottom: 1px solid #ccc;
+}
+
 .time-cell {
   background: #fafafa;
   color: #434242;
@@ -77,6 +78,11 @@ body {
   height: 30px;
   border-bottom: 1px solid #ccc;
   box-sizing: border-box;
+
+  p{
+    font-size: 12px;
+    margin-top: -15px;
+  }
 }
 
 .time-cell:last-child {
