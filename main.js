@@ -1,7 +1,7 @@
 const loadXml = document.getElementById("loadXml");
 const URI = document.getElementById("Uri");
-var activeDay = "";
-var weekDays = [];
+let activeDay = "";
+let weekDays = [];
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const months = [
   "January",
@@ -23,7 +23,7 @@ loadXml.addEventListener("click", () => {
 });
 
 function loadDoc() {
-  var xhttp = new XMLHttpRequest();
+  let xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4) {
       if (this.status == 200) {
@@ -46,8 +46,8 @@ function loadDoc() {
 }
 
 function findEvents(xmlFile) {
-  var file = xmlFile.responseXML;
-  var items = file.getElementsByTagName("item");
+  let file = xmlFile.responseXML;
+  let items = file.getElementsByTagName("item");
   const events = [];
 
   for (let i = 0; i < items.length; i++) {
@@ -67,7 +67,7 @@ function findEvents(xmlFile) {
 
     const eventMinuteStart =
       eventDateStart.getHours() * 60 + eventDateStart.getMinutes();
-    var eventMinuteEnd =
+    let eventMinuteEnd =
       eventDateEnd.getHours() * 60 + eventDateEnd.getMinutes();
 
     if (eventDayStart != eventDayEnd) {
@@ -243,8 +243,8 @@ function fixOverlapping() {
 }
 
 function findWeek(xmlFile) {
-  var file = xmlFile.responseXML;
-  var UnixTime = file.getElementsByTagName("dayinweek")[0].textContent;
+  let file = xmlFile.responseXML;
+  let UnixTime = file.getElementsByTagName("dayinweek")[0].textContent;
 
   const currentDate = new Date(UnixTime * 1000);
   const dayOfWeek = currentDate.getDay();
@@ -275,7 +275,7 @@ function generateCalendar(days) {
   timeColumn.appendChild(emptyCell);
   
   for (let i = 0; i < 48; i++) {
-    var timeLabel = i * 30;
+    let timeLabel = i * 30;
 
     const timeCell = document.createElement("div");
     timeCell.className = "time-cell";
