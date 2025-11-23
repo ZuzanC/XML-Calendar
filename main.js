@@ -243,6 +243,7 @@ function fixOverlapping() {
 }
 
 function findWeek(xmlFile) {
+  weekDays = [];
   let file = xmlFile.responseXML;
   let UnixTime = file.getElementsByTagName("dayinweek")[0].textContent;
 
@@ -263,7 +264,7 @@ function findWeek(xmlFile) {
 }
 
 function generateCalendar(days) {
-  const calendarContainer = document.getElementById("calendar");
+  var calendarContainer = document.getElementById("calendar");
   calendarContainer.innerHTML = "";
 
   const timeColumn = document.createElement("div");
